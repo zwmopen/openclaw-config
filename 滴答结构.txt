@@ -1,0 +1,23 @@
+﻿python : Traceback (most recent call last):
+所在位置 行:1 字符: 1
++ python -c "
++ ~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "<string>", line 27, in <module>
+UnicodeEncodeError: 'gbk' codec can't encode character '\U0001f3af' in position 8: illegal multibyte sequence
+表头行:
+2 Archived"
+
+
+字段名:
+['2 Archived"', None]
+
+前3条任务:
+
+--- 任务 1 ---
+2 Archived": Folder Name
+None: ['List Name', 'Title', 'Kind', 'Tags', 'Content', 'Is Check list', 'Start Date', 'Due Date', 'Reminder', 'Repeat', 'Priority', 'Status', 'Created Time', 'Completed Time', 'Order', 'Timezone', 'Is All Day', 'Is Floating', 'Column Name', 'Column Order', 'View Mode', 'taskId', 'parentId']...
+
+--- 任务 2 ---

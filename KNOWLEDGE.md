@@ -69,7 +69,13 @@ D:\Program Files\Obsidian\zwm\zwm\
 | save-to-obsidian | 1.1.0 | Obsidian保存 | ✅ |
 | find-skills | 0.1.0 | 技能搜索 | ✅ |
 
-**安装进度**: 19/19 已安装 (100%)
+**安装进度**: 20/20 已安装 (100%)
+
+### ✅ 新增技能（2026-03-05）
+
+| 技能 | 版本 | 用途 | 状态 |
+|------|------|------|------|
+| notebooklm-py | 0.3.3 | Google NotebookLM API 集成 | ⚠️ 需 Google OAuth |
 
 ### ⏳ 待配置API
 

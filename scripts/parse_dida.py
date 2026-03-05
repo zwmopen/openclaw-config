@@ -7,14 +7,30 @@ from collections import defaultdict
 # 设置输出编码
 sys.stdout.reconfigure(encoding='utf-8')
 
-# 读取CSV文件
+# 读取CSV文件（跳过前6行元数据，从第7行开始）
 tasks = []
 with open(r'C:\Users\z\Downloads\backup.csv', 'r', encoding='utf-8-sig') as f:
-    reader = csv.DictReader(f)
+    lines = f.readlines()
+    print(f'总行数: {len(lines)}')
+    print(f'从第7行开始解析数据...')
+    
+    # 第7行是标题行
+    reader = csv.DictReader(lines[6:])
     for row in reader:
         tasks.append(row)
 
 print(f'总任务数: {len(tasks)}')
+
+# 显示第一行的字段
+if tasks:
+    print('\n字段列表:')
+    for key in tasks[0].keys():
+        print(f'  - {key}')
+    
+    print('\n第一条任务示例:')
+    for key, value in list(tasks[0].items())[:8]:
+        val_preview = value[:50] if value else "(空)"
+        print(f'  {key}: {val_preview}')
 
 # 统计
 folders = defaultdict(int)
@@ -48,6 +64,7 @@ print('\n=== 状态统计 ===')
 print(f'正常任务(0): {status_count.get("0", 0)}')
 print(f'已完成(1): {status_count.get("1", 0)}')
 print(f'已归档(2): {status_count.get("2", 0)}')
+print(f'空状态: {status_count.get("", 0)}')
 
 print('\n=== 文件夹分布（前10） ===')
 for folder, count in sorted(folders.items(), key=lambda x: x[1], reverse=True)[:10]:
@@ -68,24 +85,27 @@ print(f'每月任务: {len(monthly)}个')
 
 # 显示每日任务（正常状态）
 print('\n=== 正在进行的每日任务 ===')
-for t in daily:
-    if t['status'] == '0':
-        content_preview = t['content'][:50] + '...' if len(t['content']) > 50 else t['content']
-        print(f'- [{t["list"]}] {t["title"]}')
-        if content_preview:
-            print(f'  内容: {content_preview}')
+daily_active = [t for t in daily if t['status'] == '0']
+print(f'正在进行的每日任务: {len(daily_active)}个')
+for t in daily_active:
+    content_preview = t['content'][:50] + '...' if len(t['content']) > 50 else t['content']
+    print(f'- [{t["list"]}] {t["title"]}')
+    if content_preview:
+        print(f'  内容: {content_preview}')
 
 # 显示每周任务
 print('\n=== 每周任务 ===')
-for t in weekly[:20]:
-    if t['status'] == '0':
-        print(f'- [{t["list"]}] {t["title"]}')
+weekly_active = [t for t in weekly if t['status'] == '0']
+print(f'正在进行的每周任务: {len(weekly_active)}个')
+for t in weekly_active[:20]:
+    print(f'- [{t["list"]}] {t["title"]}')
 
 # 显示每月任务
 print('\n=== 每月任务 ===')
-for t in monthly[:20]:
-    if t['status'] == '0':
-        print(f'- [{t["list"]}] {t["title"]}')
+monthly_active = [t for t in monthly if t['status'] == '0']
+print(f'正在进行的每月任务: {len(monthly_active)}个')
+for t in monthly_active[:20]:
+    print(f'- [{t["list"]}] {t["title"]}')
 
 # 提取有价值的内容（Content字段超过100字的任务）
 print('\n=== 有价值的任务内容（内容超过100字） ===')
@@ -108,9 +128,9 @@ output = {
     'status_count': dict(status_count),
     'folders': dict(folders),
     'lists': dict(lists),
-    'daily_tasks': daily,
-    'weekly_tasks': weekly,
-    'monthly_tasks': monthly,
+    'daily_tasks': daily_active,
+    'weekly_tasks': weekly_active,
+    'monthly_tasks': monthly_active,
     'valuable_tasks': valuable_tasks[:100]  # 只保存前100条
 }
 
