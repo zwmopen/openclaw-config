@@ -76,6 +76,10 @@
     "schedule": {
       "version": "1.0.2",
       "installedAt": 1772673873802
+    },
+    "qwenz-image-gen": {
+      "version": "1.0.1",
+      "installedAt": 1772714338026
     }
   }
 }
