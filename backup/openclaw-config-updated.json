@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.2.21-2",
+    "lastTouchedAt": "2026-03-01T12:40:00.000Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-02-27T16:37:31.263Z",
+    "lastRunVersion": "2026.2.21-2",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "custom-api-siliconflow-cn": {
+        "baseUrl": "https://api.siliconflow.cn/v1",
+        "apiKey": "sk-hyaakxkupozeqeisekcvnvterzifvgcjconbghtmxgrjufke",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "deepseek-ai/DeepSeek-V3",
+            "name": "DeepSeek-V3 (硅基流动)",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "contextWindow": 128000,
+            "maxTokens": 4096
+          }
+        ]
+      },
+      "unicom": {
+        "baseUrl": "https://maas-api.ai-yuanjing.com/openapi/compatible-mode/v1",
+        "apiKey": "sk-33b2451706fb4098850b14a9dfbb5827",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "glm-5",
+            "name": "GLM-5 (联通元景)",
+            "reasoning": false,
+            "input": ["text"],
+            "contextWindow": 128000,
+            "maxTokens": 4096,
+            "cost": { "input": 0, "output": 0 },
+            "compat": { "supportsDeveloperRole": false }
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "custom-api-siliconflow-cn/deepseek-ai/DeepSeek-V3"
+      },
+      "models": {
+        "custom-api-siliconflow-cn/deepseek-ai/DeepSeek-V3": {}
+      },
+      "workspace": "C:\\",
+      "contextPruning": { "mode": "cache-ttl", "ttl": "1h" },
+      "compaction": { "mode": "safeguard" },
+      "heartbeat": { "every": "30m" }
+    }
+  },
+  "commands": { "native": "auto", "nativeSkills": "auto", "restart": true, "ownerDisplay": "raw" },
+  "hooks": { "internal": { "entries": { "session-memory": { "enabled": true } } } },
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "accounts": {
+        "main": {
+          "appId": "cli_a92b975b47781bca",
+          "appSecret": "E6prhpRy7rsrVa7lMwpnHeNwbmsxkTCs",
+          "botName": "OpenClaw助手"
+        }
+      },
+      "dmPolicy": "open",
+      "appId": "cli_a92b975b47781bca",
+      "appSecret": "E6prhpRy7rsrVa7lMwpnHeNwbmsxkTCs"
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": { "mode": "token", "token": "2d65353ea3422e1bd863c865f7cc9b3d92514be0fd19ebd8" },
+    "tailscale": { "mode": "off", "resetOnExit": false }
+  },
+  "skills": { "install": { "nodeManager": "npm" } },
+  "plugins": { "entries": { "feishu": { "enabled": true } } }
+}

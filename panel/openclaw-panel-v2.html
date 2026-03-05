@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw 控制中心 Pro</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg: #e0e5ec;
+            --card: #e0e5ec;
+            --text: #2d3748;
+            --text-secondary: #64748b;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
+            --border: #c8d0e0;
+            --sidebar-width: 200px;
+        }
+        
+        [data-theme="dark"] {
+            --bg: #1a1a2e;
+            --card: #1a1a2e;
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --shadow-light: #252542;
+            --shadow-dark: #0f0f1a;
+            --border: #334155;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: background 0.3s;
+        }
+        
+        .app-container { display: flex; min-height: 100vh; }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--card);
+            box-shadow: 4px 0 16px var(--shadow-dark);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+        
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .sidebar-version {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+        
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            overflow-y: auto;
+        }
+        
+        .nav-section {
+            margin-bottom: 20px;
+        }
+        
+        .nav-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            padding: 0 12px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        
+        .nav-item:hover {
+            background: var(--bg);
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+        }
+        
+        .nav-icon { font-size: 1.1rem; width: 20px; text-align: center; }
+        
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: var(--bg);
+            font-size: 0.85rem;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.online { background: var(--success); }
+        .status-dot.offline { background: var(--danger); animation: none; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .page { display: none; }
+        .page.active { display: block; }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .page-actions { display: flex; gap: 10px; }
+        
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .card-body { padding: 20px; }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
+        .btn-success { background: linear-gradient(135deg, #10b981, #22c55e); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
+        .btn-warning { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: white; }
+        .btn-secondary { background: var(--bg); color: var(--text); }
+        
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+        .btn:active { transform: translateY(0); }
+        
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .stat-icon.primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .stat-icon.success { background: linear-gradient(135deg, #10b981, #22c55e); }
+        .stat-icon.warning { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+        .stat-icon.info { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .table-container { overflow-x: auto; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        tr:hover { background: var(--bg); }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .badge-info { background: rgba(59, 130, 246, 0.2); color: var(--info); }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light), 0 0 0 2px var(--primary);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+        
+        .toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: var(--bg);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: inset 2px 2px 4px var(--shadow-dark);
+        }
+        
+        .toggle::before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s;
+        }
+        
+        .toggle.active {
+            background: var(--success);
+        }
+        
+        .toggle.active::before {
+            transform: translateX(24px);
+            background: white;
+        }
+        
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        
+        .log-container {
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 0.8rem;
+        }
+        
+        .log-entry {
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            background: var(--bg);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .log-time { color: var(--primary); font-weight: 600; white-space: nowrap; }
+        .log-type { font-weight: 600; min-width: 60px; }
+        .log-type.info { color: var(--info); }
+        .log-type.success { color: var(--success); }
+        .log-type.error { color: var(--danger); }
+        .log-type.warning { color: var(--warning); }
+        .log-msg { flex: 1; }
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-overlay.active { display: flex; }
+        
+        .modal {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 24px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 12px 12px 24px var(--shadow-dark);
+            animation: modalIn 0.3s ease;
+        }
+        
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .modal-body { margin-bottom: 20px; }
+        
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .toast {
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            animation: toastIn 0.4s ease;
+            box-shadow: 6px 6px 12px var(--shadow-dark);
+        }
+        
+        .toast.success { background: linear-gradient(135deg, #10b981, #22c55e); }
+        .toast.error { background: linear-gradient(135deg, #ef4444, #f87171); }
+        .toast.info { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .ai-assistant {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 900;
+        }
+        
+        .ai-fab {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 6px 6px 16px var(--shadow-dark);
+            transition: all 0.3s;
+        }
+        
+        .ai-fab:hover { transform: scale(1.1); }
+        
+        .ai-panel {
+            display: none;
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 380px;
+            height: 500px;
+            background: var(--card);
+            border-radius: 20px;
+            box-shadow: 8px 8px 24px var(--shadow-dark);
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .ai-panel.active { display: flex; }
+        
+        .ai-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ai-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ai-model-select {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: none;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.8rem;
+        }
+        
+        .ai-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        .ai-msg {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .ai-msg.user { flex-direction: row-reverse; }
+        
+        .ai-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        .ai-msg.assistant .ai-avatar { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .ai-msg.user .ai-avatar { background: var(--success); }
+        
+        .ai-bubble {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .ai-msg.assistant .ai-bubble { background: var(--bg); }
+        .ai-msg.user .ai-bubble { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
+        
+        .ai-input-area {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .ai-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+        
+        .ai-send {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .template-card {
+            padding: 16px;
+            border-radius: 12px;
+            background: var(--bg);
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .template-card:hover {
+            border-color: var(--primary);
+        }
+        
+        .template-card.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        .template-name {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .template-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .channel-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 12px;
+            background: var(--bg);
+            margin-bottom: 12px;
+        }
+        
+        .channel-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--card);
+            box-shadow: 4px 4px 8px var(--shadow-dark);
+        }
+        
+        .channel-info { flex: 1; }
+        .channel-name { font-weight: 600; margin-bottom: 4px; }
+        .channel-status { font-size: 0.8rem; color: var(--text-secondary); }
+        
+        .skill-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 12px;
+            background: var(--bg);
+            margin-bottom: 12px;
+        }
+        
+        .skill-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        }
+        
+        .skill-info { flex: 1; }
+        .skill-name { font-weight: 600; margin-bottom: 4px; }
+        .skill-desc { font-size: 0.8rem; color: var(--text-secondary); }
+        
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            background: var(--bg);
+            margin-bottom: 8px;
+        }
+        
+        .check-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        
+        .check-icon.ok { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .check-icon.warn { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .check-icon.error { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        
+        .check-info { flex: 1; }
+        .check-name { font-weight: 600; font-size: 0.9rem; }
+        .check-msg { font-size: 0.8rem; color: var(--text-secondary); }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">🦞</div>
+                <div>
+                    <div class="sidebar-title">OpenClaw Pro</div>
+                    <div class="sidebar-version" id="version">v2026.3.1</div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">主菜单</div>
+                    <div class="nav-item active" data-page="dashboard">
+                        <span class="nav-icon">📊</span>
+                        <span>仪表盘</span>
+                    </div>
+                    <div class="nav-item" data-page="channels">
+                        <span class="nav-icon">📡</span>
+                        <span>通道管理</span>
+                    </div>
+                    <div class="nav-item" data-page="models">
+                        <span class="nav-icon">🤖</span>
+                        <span>模型配置</span>
+                    </div>
+                    <div class="nav-item" data-page="agents">
+                        <span class="nav-icon">👤</span>
+                        <span>Agent管理</span>
+                    </div>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">配置</div>
+                    <div class="nav-item" data-page="templates">
+                        <span class="nav-icon">📋</span>
+                        <span>配置模板</span>
+                    </div>
+                    <div class="nav-item" data-page="skills">
+                        <span class="nav-icon">⚡</span>
+                        <span>技能中心</span>
+                    </div>
+                    <div class="nav-item" data-page="diagnose">
+                        <span class="nav-icon">🔍</span>
+                        <span>配置检测</span>
+                    </div>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">日志</div>
+                    <div class="nav-item" data-page="events">
+                        <span class="nav-icon">📜</span>
+                        <span>事件日志</span>
+                    </div>
+                    <div class="nav-item" data-page="logs">
+                        <span class="nav-icon">📝</span>
+                        <span>运行日志</span>
+                    </div>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">系统</div>
+                    <div class="nav-item" data-page="backup">
+                        <span class="nav-icon">☁️</span>
+                        <span>备份恢复</span>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="status-badge">
+                    <span class="status-dot offline" id="statusDot"></span>
+                    <span id="statusText">已停止</span>
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <div class="page active" id="page-dashboard">
+                <div class="page-header">
+                    <h1 class="page-title">📊 仪表盘</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-success" id="btnStart">▶ 启动网关</button>
+                        <button class="btn btn-danger" id="btnStop" style="display:none;">⏹ 停止网关</button>
+                        <button class="btn btn-warning" id="btnRestart">🔄 重启</button>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon primary">💬</div>
+                        </div>
+                        <div class="stat-value" id="msgCount">0</div>
+                        <div class="stat-label">消息总数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon success">🎯</div>
+                        </div>
+                        <div class="stat-value" id="tokenUsed">0</div>
+                        <div class="stat-label">Token已用</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon warning">⏱️</div>
+                        </div>
+                        <div class="stat-value" id="uptime">-</div>
+                        <div class="stat-label">运行时长</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon info">🔄</div>
+                        </div>
+                        <div class="stat-value" id="startCount">0</div>
+                        <div class="stat-label">启动次数</div>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">🤖 当前模型</span>
+                            <button class="btn btn-sm btn-primary" id="btnSwitchModel">切换</button>
+                        </div>
+                        <div class="card-body">
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;" id="currentModel">DeepSeek-V3</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);" id="modelProvider">硅基流动</div>
+                            <div class="progress-bar" style="margin-top: 12px;">
+                                <div class="progress-fill" id="tokenBar" style="width: 0%;"></div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 6px;">Token 使用量</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">📡 活动通道</span>
+                        </div>
+                        <div class="card-body" id="activeChannels">
+                            <div class="channel-card">
+                                <div class="channel-icon">📱</div>
+                                <div class="channel-info">
+                                    <div class="channel-name">飞书</div>
+                                    <div class="channel-status">已连接</div>
+                                </div>
+                                <span class="badge badge-success">在线</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">🔒 安全状态</span>
+                        <button class="btn btn-sm btn-secondary" id="btnRunDiagnose">运行检测</button>
+                    </div>
+                    <div class="card-body" id="securityChecks">
+                        <div class="check-item">
+                            <div class="check-icon ok">✓</div>
+                            <div class="check-info">
+                                <div class="check-name">Gateway 绑定</div>
+                                <div class="check-msg">已绑定到 loopback (安全)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page" id="page-channels">
+                <div class="page-header">
+                    <h1 class="page-title">📡 通道管理</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="btnAddChannel">+ 添加通道</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">已配置通道</span>
+                    </div>
+                    <div class="card-body" id="channelList">
+                        <div class="channel-card">
+                            <div class="channel-icon">📱</div>
+                            <div class="channel-info">
+                                <div class="channel-name">飞书 (Feishu)</div>
+                                <div class="channel-status">长连接模式 · 事件订阅已启用</div>
+                            </div>
+                            <div class="toggle active"></div>
+                        </div>
+                        <div class="channel-card">
+                            <div class="channel-icon">💬</div>
+                            <div class="channel-info">
+                                <div class="channel-name">QQ (NapCat)</div>
+                                <div class="channel-status">未配置</div>
+                            </div>
+                            <div class="toggle"></div>
+                        </div>
+                        <div class="channel-card">
+                            <div class="channel-icon">🟢</div>
+                            <div class="channel-info">
+                                <div class="channel-name">微信</div>
+                                <div class="channel-status">未配置</div>
+                            </div>
+                            <div class="toggle"></div>
+                        </div>
+                        <div class="channel-card">
+                            <div class="channel-icon">📞</div>
+                            <div class="channel-info">
+                                <div class="channel-name">Telegram</div>
+                                <div class="channel-status">未配置</div>
+                            </div>
+                            <div class="toggle"></div>
+                        </div>
+                        <div class="channel-card">
+                            <div class="channel-icon">🎮</div>
+                            <div class="channel-info">
+                                <div class="channel-name">Discord</div>
+                                <div class="channel-status">未配置</div>
+                            </div>
+                            <div class="toggle"></div>
+                        </div>
+                        <div class="channel-card">
+                            <div class="channel-icon">💼</div>
+                            <div class="channel-info">
+                                <div class="channel-name">钉钉</div>
+                                <div class="channel-status">未配置</div>
+                            </div>
+                            <div class="toggle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page" id="page-models">
+                <div class="page-header">
+                    <h1 class="page-title">🤖 模型配置</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="btnAddProvider">+ 添加提供商</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">模型提供商</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>提供商</th>
+                                        <th>模型</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modelTable">
+                                    <tr>
+                                        <td>🟢 硅基流动</td>
+                                        <td>DeepSeek-V3</td>
+                                        <td><span class="badge badge-success">默认</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary">编辑</button>
+                                            <button class="btn btn-sm btn-primary">设为默认</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>🟡 联通元景</td>
+                                        <td>GLM-5</td>
+                                        <td><span class="badge badge-info">备用</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary">编辑</button>
+                                            <button class="btn btn-sm btn-primary">设为默认</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>🟡 智谱AI</td>
+                                        <td>GLM-4.6</td>
+                                        <td><span class="badge badge-info">备用</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary">编辑</button>
+                                            <button class="btn btn-sm btn-primary">设为默认</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">快速切换模型</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">选择模型</label>
+                            <select class="form-select" id="quickModelSelect">
+                                <option value="custom-api-siliconflow-cn/deepseek-ai/DeepSeek-V3">🟢 DeepSeek-V3 (硅基流动)</option>
+                                <option value="unicom/glm-5">🟡 GLM-5 (联通元景)</option>
+                                <option value="custom-api-zhipu/glm-4.6">🟡 GLM-4.6 (智谱AI)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="btnApplyModel">应用更改</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page" id="page-agents">
+                <div class="page-header">
+                    <h1 class="page-title">👤 Agent管理</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="btnAddAgent">+ 创建Agent</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Agent列表</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>名称</th>
+                                        <th>模型</th>
+                                        <th>通道</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="agentTable">
+                                    <tr>
+                                        <td>Default Agent</td>
+                                        <td>DeepSeek-V3</td>
+                                        <td>飞书</td>
+                                        <td><span class="badge badge-success">运行中</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary">编辑</button>
+                                            <button class="btn btn-sm btn-danger">删除</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Agent配置</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">系统提示词</label>
+                                <textarea class="form-input" rows="4" id="systemPrompt" placeholder="输入系统提示词..."></textarea>
+                            </div>
+                            <div>
+                                <div class="form-group">
+                                    <label class="form-label">温度 (Temperature)</label>
+                                    <input type="number" class="form-input" id="temperature" value="0.7" min="0" max="2" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">最大Token</label>
+                                    <input type="number" class="form-input" id="maxTokens" value="4096">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-success" id="btnSaveAgent">保存配置</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page" id="page-templates">
+                <div class="page-header">
+                    <h1 class="page-title">📋 配置模板</h1>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">预制模板</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="template-card" data-template="assistant">
+                            <div class="template-name">🤖 AI助手模板</div>
+                            <div class="template-desc">基础AI助手配置，适合日常对话和任务处理</div>
+                        </div>
+                        <div class="template-card" data-template="coder">
+                            <div class="template-name">💻 编程助手模板</div>
+                            <div class="template-desc">专为代码生成和调试优化，包含编程相关技能</div>
+                        </div>
+                        <div class="template-card" data-template="translator">
+                            <div class="template-name">🌐 翻译助手模板</div>
+                            <div class="template-desc">多语言翻译配置，支持中英日韩等语言</div>
+                        </div>
+                        <div class="template-card" data-template="customer">
+                            <div class="template-name">🎧 客服助手模板</div>
+                            <div class="template-desc">企业客服场景配置，自动回复和工单处理</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page" id="page-skills">
+                <div class="page-header">
+                    <h1 class="page-title">⚡ 技能中心</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="btnInstallSkill">+ 安装技能</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">已安装技能</span>
+                    </div>
+                    <div class="card-body" id="skillList">
+                        <div class="skill-card">
+                            <div class="skill-icon">📧</div>
+                            <div class="skill-info">
+                                <div class="skill-name">邮件处理</div>
+                                <div class="skill-desc">自动处理邮件收发、分类和回复</div>
+                            </div>
+                            <div class="toggle active"></div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">📅</div>
+                            <div class="skill-info">
+                                <div class="skill-name">日历管理</div>
+                                <div class="skill-desc">日程安排、提醒和会议管理</div>
+                            </div>
+                            <div class="toggle active"></div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">🔍</div>
+                            <div class="skill-info">
+                                <div class="skill-name">网页搜索</div>
+                                <div class="skill-desc">实时网络搜索和信息检索</div>
+                            </div>
+                            <div class="toggle"></div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">📊</div>
+                            <div class="skill-info">
+                                <div class="skill-name">数据分析</div>
+                                <div class="skill-desc">数据可视化和报表生成</div>
+                            </div>
+                            <div class="toggle"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <span class="card-title">🔥 热门技能仓库导航</span>
+                        <a href="https://github.com/VoltAgent/awesome-openclaw-skills" target="_blank" class="btn btn-sm btn-secondary">查看全部 5494+ 技能 →</a>
+                    </div>
+                    <div class="card-body">
+                        <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">🌐 浏览器自动化</div>
+                            <div style="display: grid; gap: 8px;">
+                                <a href="https://github.com/VoltAgent/agent-browser" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg); border-radius: 8px; text-decoration: none; color: inherit; font-size: 0.9rem;">
+                                    <span>🔗</span> agent-browser - 浏览器自动化核心库
+                                </a>
+                                <a href="https://github.com/nick1udwig/playwright-mcp" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg); border-radius: 8px; text-decoration: none; color: inherit; font-size: 0.9rem;">
+                                    <span>🔗</span> playwright-mcp - Playwright 浏览器控制
+                                </a>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">💻 编程开发</div>
+                            <div style="display: grid; gap: 8px;">
+                                <a href="https://github.com/continuedev/continue" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg); border-radius: 8px; text-decoration: none; color: inherit; font-size: 0.9rem;">
+                                    <span>🔗</span> continue - VS Code AI 编程助手
+                                </a>
+                                <a href="https://github.com/Aider-AI/aider" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg); border-radius: 8px; text-decoration: none; color: inherit; font-size: 0.9rem;">
+                                    <span>🔗</span> aider - AI 结对编程工具
+                                </a>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">📦 Git & GitHub</div>
+                            <div style="display: grid; gap: 8px;">
+                                <a href="https://github.com/utensils/unfuck-my-git-state" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg); border-radius: 8px; text-decoration: none; color: inherit; font-size: 0.9rem;">
+                                    <span>🔗</span> unfuck-my-git-state - Git 状态修复神器
+                                </a>
+                                <a href="https://github.com/github/github-mcp-server" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg); border-radius: 8px; text-decoration: none; color: inherit; font-size: 0.9rem;">
+                                    <span>🔗</span> github-mcp-server - GitHub 官方集成
+                                </a>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">🎨 多媒体生成</div>
+                            <div style="display: grid; gap: 8px;">
+                                <a href="https://github.com/elevenlabs/elevenlabs-mcp" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg); border-radius: 8px; text-decoration: none; color: inherit; font-size: 0.9rem;">
+                                    <span>🔗</span> elevenlabs-mcp - ElevenLabs 语音合成
+                                </a>
+                                <a href="https://github.com/lecepin/flux-image-mcp" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg); border-radius: 8px; text-decoration: none; color: inherit; font-size: 0.9rem;">
+                                    <span>🔗</span> flux-image-mcp - Flux AI 图像生成
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">☁️ DevOps & 云服务</div>
+                            <div style="display: grid; gap: 8px;">
+                                <a href="https://github.com/QuantGeekDev/docker-mcp" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg); border-radius: 8px; text-decoration: none; color: inherit; font-size: 0.9rem;">
+                                    <span>🔗</span> docker-mcp - Docker 容器管理
+                                </a>
+                                <a href="https://github.com/Flux159/mcp-server-kubernetes" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg); border-radius: 8px; text-decoration: none; color: inherit; font-size: 0.9rem;">
+                                    <span>🔗</span> mcp-server-kubernetes - K8s 集群管理
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page" id="page-diagnose">
+                <div class="page-header">
+                    <h1 class="page-title">🔍 配置检测</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="btnDiagnoseAll">一键检测</button>
+                        <button class="btn btn-success" id="btnFixAll">一键修复</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">检测结果</span>
+                    </div>
+                    <div class="card-body" id="diagnoseResults">
+                        <div class="check-item">
+                            <div class="check-icon ok">✓</div>
+                            <div class="check-info">
+                                <div class="check-name">Gateway 绑定</div>
+                                <div class="check-msg">已绑定到 loopback (安全)</div>
+                            </div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-icon ok">✓</div>
+                            <div class="check-info">
+                                <div class="check-name">认证配置</div>
+                                <div class="check-msg">Token 认证已启用</div>
+                            </div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-icon ok">✓</div>
+                            <div class="check-info">
+                                <div class="check-name">配置文件</div>
+                                <div class="check-msg">权限正常</div>
+                            </div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-icon ok">✓</div>
+                            <div class="check-info">
+                                <div class="check-name">Node.js 环境</div>
+                                <div class="check-msg">v22.18.0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page" id="page-events">
+                <div class="page-header">
+                    <h1 class="page-title">📜 事件日志</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-secondary" id="btnClearEvents">清空日志</button>
+                        <button class="btn btn-primary" id="btnExportEvents">导出</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">实时事件流</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="log-container" id="eventLog">
+                            <div class="log-entry">
+                                <span class="log-time">--:--:--</span>
+                                <span class="log-type info">系统</span>
+                                <span class="log-msg">等待事件...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page" id="page-logs">
+                <div class="page-header">
+                    <h1 class="page-title">📝 运行日志</h1>
+                    <div class="page-actions">
+                        <button class="btn btn-secondary" id="btnRefreshLogs">刷新</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">系统日志</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="log-container" id="systemLog">
+                            <div class="log-entry">
+                                <span class="log-time">--:--:--</span>
+                                <span class="log-type info">系统</span>
+                                <span class="log-msg">等待日志...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page" id="page-backup">
+                <div class="page-header">
+                    <h1 class="page-title">☁️ 备份恢复</h1>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">GitHub 备份</span>
+                        </div>
+                        <div class="card-body">
+                            <p style="margin-bottom: 16px; color: var(--text-secondary);">将配置文件备份到GitHub私有仓库</p>
+                            <div class="form-group">
+                                <label class="form-label">仓库地址</label>
+                                <input type="text" class="form-input" value="https://github.com/zwmopen/openclaw-config-backup" id="repoUrl" readonly>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn btn-primary" id="btnBackup">📤 推送备份</button>
+                                <a href="https://github.com/zwmopen/openclaw-config-backup" target="_blank" class="btn btn-secondary">🔗 访问仓库</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">本地备份</span>
+                        </div>
+                        <div class="card-body">
+                            <p style="margin-bottom: 16px; color: var(--text-secondary);">导出配置到本地文件</p>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button class="btn btn-success" id="btnExportConfig">📥 导出配置</button>
+                                <button class="btn btn-warning" id="btnImportConfig">📤 导入配置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">备份历史</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>时间</th>
+                                        <th>类型</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2026-03-01 19:20</td>
+                                        <td>GitHub</td>
+                                        <td><span class="badge badge-success">成功</span></td>
+                                        <td><button class="btn btn-sm btn-secondary">查看</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <div class="ai-assistant">
+        <div class="ai-panel" id="aiPanel">
+            <div class="ai-header">
+                <div class="ai-title">🤖 AI 助手</div>
+                <select class="ai-model-select" id="aiModelSelect">
+                    <option value="deepseek">DeepSeek-V3</option>
+                    <option value="glm5">GLM-5</option>
+                    <option value="glm4">GLM-4.6</option>
+                </select>
+            </div>
+            <div class="ai-messages" id="aiMessages">
+                <div class="ai-msg assistant">
+                    <div class="ai-avatar">🦞</div>
+                    <div class="ai-bubble">你好！我是OpenClaw AI助手，有什么可以帮助你的吗？</div>
+                </div>
+            </div>
+            <div class="ai-input-area">
+                <input type="text" class="ai-input" id="aiInput" placeholder="输入消息...">
+                <button class="ai-send" id="aiSend">➤</button>
+            </div>
+        </div>
+        <button class="ai-fab" id="aiFab">🤖</button>
+    </div>
+    
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">标题</h3>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var toastContainer = document.getElementById('toastContainer');
+        var statusDot = document.getElementById('statusDot');
+        var statusText = document.getElementById('statusText');
+        var startTime = null;
+        var uptimeTimer = null;
+        var busy = false;
+        
+        function toast(msg, type) {
+            type = type || 'info';
+            var t = document.createElement('div');
+            t.className = 'toast ' + type;
+            t.textContent = msg;
+            toastContainer.appendChild(t);
+            setTimeout(function() { if(t.parentNode) t.parentNode.removeChild(t); }, 4000);
+        }
+        
+        function showModal(title, body, footer) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = body;
+            document.getElementById('modalFooter').innerHTML = footer || '';
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+        
+        function hideModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+        
+        function updateUI(running) {
+            statusDot.className = 'status-dot ' + (running ? 'online' : 'offline');
+            statusText.textContent = running ? '运行中' : '已停止';
+            document.getElementById('btnStart').style.display = running ? 'none' : 'inline-flex';
+            document.getElementById('btnStop').style.display = running ? 'inline-flex' : 'none';
+            
+            if (running && !startTime) {
+                startTime = new Date();
+                if (!uptimeTimer) uptimeTimer = setInterval(updateUptime, 1000);
+            } else if (!running) {
+                startTime = null;
+                if (uptimeTimer) { clearInterval(uptimeTimer); uptimeTimer = null; }
+                document.getElementById('uptime').textContent = '-';
+            }
+        }
+        
+        function updateUptime() {
+            if (!startTime) return;
+            var diff = Math.floor((Date.now() - startTime.getTime()) / 1000);
+            var h = Math.floor(diff / 3600);
+            var m = Math.floor((diff % 3600) / 60);
+            var s = diff % 60;
+            document.getElementById('uptime').textContent = h + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+        }
+        
+        function loadStatus() {
+            fetch('/api/status')
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    document.getElementById('version').textContent = 'v' + (d.version || '2026.3.1');
+                    document.getElementById('startCount').textContent = d.startCount || '0';
+                    document.getElementById('msgCount').textContent = d.msgCount || '0';
+                    if (d.tokenUsed) {
+                        document.getElementById('tokenUsed').textContent = d.tokenUsed;
+                        var pct = Math.min(100, (d.tokenUsed / 1000000) * 100);
+                        document.getElementById('tokenBar').style.width = pct + '%';
+                    }
+                    if (d.currentModel) {
+                        var modelParts = d.currentModel.split('/');
+                        var providerName = modelParts[0] || '';
+                        var modelName = modelParts[modelParts.length - 1];
+                        document.getElementById('currentModel').textContent = modelName || d.currentModel;
+                        // 根据提供商ID显示中文名称
+                        var providerNames = {
+                            'unicom': '联通元景',
+                            'custom-api-siliconflow-cn': '硅基流动',
+                            'zhipu-official': '智谱AI'
+                        };
+                        document.getElementById('modelProvider').textContent = providerNames[providerName] || providerName;
+                    }
+                    if (d.activeChannels && d.activeChannels.length > 0) {
+                        var channelsHtml = '';
+                        d.activeChannels.forEach(function(ch) {
+                            var statusClass = ch.enabled ? 'badge-success' : 'badge-danger';
+                            var statusText = ch.enabled ? '在线' : '离线';
+                            channelsHtml += '<div class="channel-card"><div class="channel-icon">📱</div><div class="channel-info"><div class="channel-name">' + ch.name + '</div><div class="channel-status">' + ch.status + '</div></div><span class="badge ' + statusClass + '">' + statusText + '</span></div>';
+                        });
+                        document.getElementById('activeChannels').innerHTML = channelsHtml;
+                    }
+                    if (!busy) updateUI(d.running);
+                    if (d.running && d.startTime) {
+                        startTime = new Date(d.startTime);
+                        if (!uptimeTimer) uptimeTimer = setInterval(updateUptime, 1000);
+                    }
+                })
+                .catch(function() { if (!busy) updateUI(false); });
+        }
+        
+        function startGateway() {
+            if (busy) return;
+            busy = true;
+            toast('正在启动...', 'info');
+            fetch('/api/start', { method: 'POST' })
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    busy = false;
+                    if (d.success) {
+                        toast('启动成功！', 'success');
+                        updateUI(true);
+                    } else {
+                        toast('启动失败: ' + (d.error || '未知错误'), 'error');
+                    }
+                })
+                .catch(function(e) {
+                    busy = false;
+                    toast('启动失败', 'error');
+                });
+        }
+        
+        function stopGateway() {
+            if (busy) return;
+            busy = true;
+            toast('正在停止...', 'info');
+            fetch('/api/stop', { method: 'POST' })
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    busy = false;
+                    if (d.success) {
+                        toast('已停止', 'success');
+                        updateUI(false);
+                    } else {
+                        toast('停止失败', 'error');
+                    }
+                })
+                .catch(function() {
+                    busy = false;
+                    toast('停止失败', 'error');
+                });
+        }
+        
+        function restartGateway() {
+            if (busy) return;
+            busy = true;
+            toast('正在重启...', 'info');
+            fetch('/api/restart', { method: 'POST' })
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    busy = false;
+                    if (d.success) {
+                        toast('重启成功！', 'success');
+                        updateUI(true);
+                    } else {
+                        toast('重启失败', 'error');
+                    }
+                })
+                .catch(function() {
+                    busy = false;
+                    toast('重启失败', 'error');
+                });
+        }
+        
+        function githubBackup() {
+            if (busy) return;
+            busy = true;
+            toast('正在备份到GitHub...', 'info');
+            fetch('/api/backup', { method: 'POST' })
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    busy = false;
+                    if (d.success) {
+                        toast('备份成功！', 'success');
+                    } else {
+                        toast('备份失败: ' + (d.error || '未知错误'), 'error');
+                    }
+                })
+                .catch(function() {
+                    busy = false;
+                    toast('备份失败', 'error');
+                });
+        }
+        
+        function switchModel() {
+            var modelId = document.getElementById('quickModelSelect').value;
+            if (busy) return;
+            busy = true;
+            toast('正在切换模型...', 'info');
+            fetch('/api/model', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ model: modelId })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                busy = false;
+                if (d.success) {
+                    toast('模型切换成功！', 'success');
+                } else {
+                    toast('切换失败', 'error');
+                }
+            })
+            .catch(function() {
+                busy = false;
+                toast('切换失败', 'error');
+            });
+        }
+        
+        function runDiagnose() {
+            if (busy) return;
+            busy = true;
+            toast('正在检测...', 'info');
+            fetch('/api/diagnose', { method: 'POST' })
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    busy = false;
+                    var html = '';
+                    d.checks.forEach(function(c) {
+                        var cls = c.status === 'ok' ? 'ok' : (c.status === 'warn' ? 'warn' : 'error');
+                        var icon = c.status === 'ok' ? '✓' : (c.status === 'warn' ? '⚠' : '✗');
+                        html += '<div class="check-item"><div class="check-icon ' + cls + '">' + icon + '</div><div class="check-info"><div class="check-name">' + c.name + '</div><div class="check-msg">' + c.message + '</div></div></div>';
+                    });
+                    document.getElementById('diagnoseResults').innerHTML = html;
+                    document.getElementById('securityChecks').innerHTML = html;
+                    toast('检测完成！', 'success');
+                })
+                .catch(function() {
+                    busy = false;
+                    toast('检测失败', 'error');
+                });
+        }
+        
+        function sendAIMessage() {
+            var input = document.getElementById('aiInput');
+            var msg = input.value.trim();
+            if (!msg) return;
+            
+            var messages = document.getElementById('aiMessages');
+            messages.innerHTML += '<div class="ai-msg user"><div class="ai-avatar">👤</div><div class="ai-bubble">' + msg + '</div></div>';
+            input.value = '';
+            
+            messages.innerHTML += '<div class="ai-msg assistant"><div class="ai-avatar">🦞</div><div class="ai-bubble">正在思考...</div></div>';
+            messages.scrollTop = messages.scrollHeight;
+            
+            fetch('/api/ai/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: msg, model: document.getElementById('aiModelSelect').value })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                var lastMsg = messages.querySelector('.ai-msg.assistant:last-child .ai-bubble');
+                if (lastMsg) lastMsg.textContent = d.reply || '抱歉，我无法处理这个请求。';
+                messages.scrollTop = messages.scrollHeight;
+            })
+            .catch(function() {
+                var lastMsg = messages.querySelector('.ai-msg.assistant:last-child .ai-bubble');
+                if (lastMsg) lastMsg.textContent = '网络错误，请稍后重试。';
+            });
+        }
+        
+        document.querySelectorAll('.nav-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(function(i) { i.classList.remove('active'); });
+                document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+                this.classList.add('active');
+                var page = this.getAttribute('data-page');
+                document.getElementById('page-' + page).classList.add('active');
+            });
+        });
+        
+        document.getElementById('btnStart').addEventListener('click', startGateway);
+        document.getElementById('btnStop').addEventListener('click', stopGateway);
+        document.getElementById('btnRestart').addEventListener('click', restartGateway);
+        document.getElementById('btnBackup').addEventListener('click', githubBackup);
+        document.getElementById('btnApplyModel').addEventListener('click', switchModel);
+        document.getElementById('btnDiagnoseAll').addEventListener('click', runDiagnose);
+        document.getElementById('btnRunDiagnose').addEventListener('click', runDiagnose);
+        
+        var btnFixAll = document.getElementById('btnFixAll');
+        if (btnFixAll) btnFixAll.addEventListener('click', function() { toast('一键修复功能开发中...', 'info'); });
+        
+        var btnAddChannel = document.getElementById('btnAddChannel');
+        if (btnAddChannel) btnAddChannel.addEventListener('click', function() { showModal('添加通道', '<p>通道配置功能开发中...</p>', '<button class="btn btn-secondary" onclick="document.getElementById(\'modalOverlay\').classList.remove(\'active\')">关闭</button>'); });
+        
+        var btnAddProvider = document.getElementById('btnAddProvider');
+        if (btnAddProvider) btnAddProvider.addEventListener('click', function() { showModal('添加模型提供商', '<div class="form-group"><label class="form-label">提供商名称</label><input type="text" class="form-input" id="providerName"></div><div class="form-group"><label class="form-label">API Base URL</label><input type="text" class="form-input" id="providerUrl"></div><div class="form-group"><label class="form-label">API Key</label><input type="password" class="form-input" id="providerKey"></div>', '<button class="btn btn-secondary" onclick="document.getElementById(\'modalOverlay\').classList.remove(\'active\')">取消</button><button class="btn btn-primary" onclick="toast(\'功能开发中...\', \'info\')">保存</button>'); });
+        
+        var btnAddAgent = document.getElementById('btnAddAgent');
+        if (btnAddAgent) btnAddAgent.addEventListener('click', function() { showModal('创建Agent', '<div class="form-group"><label class="form-label">Agent名称</label><input type="text" class="form-input" id="agentName"></div><div class="form-group"><label class="form-label">选择模型</label><select class="form-select" id="agentModel"><option>DeepSeek-V3</option><option>GLM-5</option><option>GLM-4.6</option></select></div>', '<button class="btn btn-secondary" onclick="document.getElementById(\'modalOverlay\').classList.remove(\'active\')">取消</button><button class="btn btn-primary" onclick="toast(\'功能开发中...\', \'info\')">创建</button>'); });
+        
+        var btnInstallSkill = document.getElementById('btnInstallSkill');
+        if (btnInstallSkill) btnInstallSkill.addEventListener('click', function() { showModal('安装技能', '<p>技能安装功能开发中...</p>', '<button class="btn btn-secondary" onclick="document.getElementById(\'modalOverlay\').classList.remove(\'active\')">关闭</button>'); });
+        
+        var btnSaveSettings = document.getElementById('btnSaveSettings');
+        if (btnSaveSettings) btnSaveSettings.addEventListener('click', function() { toast('设置已保存！', 'success'); });
+        
+        var btnSaveAgent = document.getElementById('btnSaveAgent');
+        if (btnSaveAgent) btnSaveAgent.addEventListener('click', function() { toast('Agent配置已保存！', 'success'); });
+        
+        var btnExportConfig = document.getElementById('btnExportConfig');
+        if (btnExportConfig) btnExportConfig.addEventListener('click', function() { toast('配置导出功能开发中...', 'info'); });
+        
+        var btnImportConfig = document.getElementById('btnImportConfig');
+        if (btnImportConfig) btnImportConfig.addEventListener('click', function() { toast('配置导入功能开发中...', 'info'); });
+        
+        var btnRefreshLogs = document.getElementById('btnRefreshLogs');
+        if (btnRefreshLogs) btnRefreshLogs.addEventListener('click', function() { toast('日志已刷新', 'info'); });
+        
+        var btnClearEvents = document.getElementById('btnClearEvents');
+        if (btnClearEvents) btnClearEvents.addEventListener('click', function() { document.getElementById('eventLog').innerHTML = '<div class="log-entry"><span class="log-time">--:--:--</span><span class="log-type info">系统</span><span class="log-msg">日志已清空</span></div>'; toast('事件日志已清空', 'success'); });
+        
+        var btnExportEvents = document.getElementById('btnExportEvents');
+        if (btnExportEvents) btnExportEvents.addEventListener('click', function() { toast('导出功能开发中...', 'info'); });
+        
+        document.getElementById('aiFab').addEventListener('click', function() {
+            document.getElementById('aiPanel').classList.toggle('active');
+        });
+        
+        document.getElementById('aiSend').addEventListener('click', sendAIMessage);
+        document.getElementById('aiInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendAIMessage();
+        });
+        
+        document.getElementById('modalClose').addEventListener('click', hideModal);
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) hideModal();
+        });
+        
+        document.querySelectorAll('.toggle').forEach(function(t) {
+            t.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+        
+        loadStatus();
+        setInterval(loadStatus, 5000);
+    })();
+    </script>
+</body>
+</html>

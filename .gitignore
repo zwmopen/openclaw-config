@@ -1,0 +1,31 @@
+﻿# OpenClaw 工作目录
+.openclaw/
+chromadb/
+chromadb-obsidian/
+temp/
+*.tmp
+*.temp
+*.log
+*.bak
+*.exe
+*.msi
+*.zip
+*.pem
+*.key
+*.sqlite3
+
+# 敏感配置 - 绝对不要提交！
+docs/API密钥汇总.json
+docs/账号信息总览.md
+安全配置/
+SECRETS.md
+scripts/github-upload.ps1
+scripts/push-to-github.ps1
+
+# Node modules
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/

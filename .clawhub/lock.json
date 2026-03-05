@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "skills": {
+    "save-to-obsidian": {
+      "version": "1.1.0",
+      "installedAt": 1772466482306
+    },
+    "find-skills": {
+      "version": "0.1.0",
+      "installedAt": 1772467885051
+    },
+    "fal-ai": {
+      "version": "0.1.0",
+      "installedAt": 1772585884194
+    },
+    "ffmpeg-video-editor": {
+      "version": "1.0.0",
+      "installedAt": 1772585945242
+    },
+    "agent-memory": {
+      "version": "1.0.0",
+      "installedAt": 1772585946877
+    },
+    "openclaw-tavily-search": {
+      "version": "0.1.0",
+      "installedAt": 1772668681900
+    },
+    "multi-search-engine-2-0-1": {
+      "version": "1.0.0",
+      "installedAt": 1772668710448
+    },
+    "skill-vetter": {
+      "version": "1.0.0",
+      "installedAt": 1772668729692
+    },
+    "self-improving": {
+      "version": "1.2.3",
+      "installedAt": 1772668744541
+    },
+    "automation-workflows": {
+      "version": "0.1.0",
+      "installedAt": 1772668759069
+    },
+    "qmd": {
+      "version": "1.0.0",
+      "installedAt": 1772668775948
+    },
+    "anygen-skill": {
+      "version": "1.0.0",
+      "installedAt": 1772673663641
+    },
+    "anygen-deep-research": {
+      "version": "1.0.0",
+      "installedAt": 1772673668630
+    },
+    "anygen-slide-generator": {
+      "version": "1.0.0",
+      "installedAt": 1772673673690
+    },
+    "anygen-data-analysis": {
+      "version": "1.0.0",
+      "installedAt": 1772673678556
+    },
+    "notion": {
+      "version": "1.0.0",
+      "installedAt": 1772673851355
+    },
+    "cross-platform-poster": {
+      "version": "1.0.0",
+      "installedAt": 1772673856004
+    },
+    "transcript": {
+      "version": "1.4.1",
+      "installedAt": 1772673869398
+    },
+    "schedule": {
+      "version": "1.0.2",
+      "installedAt": 1772673873802
+    }
+  }
+}

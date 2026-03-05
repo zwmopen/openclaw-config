@@ -1,0 +1,9 @@
+﻿{
+    "features":  {
+                     "feishu":  true,
+                     "autoUpdate":  true,
+                     "elevated":  false
+                 },
+    "startTime":  "2026-03-01T21:57:39.0802405+08:00",
+    "startCount":  7
+}

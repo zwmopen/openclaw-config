@@ -1,0 +1,66 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-03-05T10:52:00Z",
+  "windows": [
+    {
+      "id": "window-1",
+      "name": "主窗口",
+      "purpose": "自我迭代、进化、系统管理",
+      "channel": "feishu",
+      "chatId": "user:ou_87628a02a45ec6d7205b79cda92b20f7",
+      "accountId": "main",
+      "botId": "cli_a92b975b47781bca",
+      "status": "active",
+      "createdAt": "2026-03-01T00:00:00Z",
+      "lastActive": "2026-03-05T10:52:00Z",
+      "memoryFile": "windows/window-1-main.md",
+      "currentTask": "进化计划管理",
+      "progress": "阶段2：主动性升级 - 45%"
+    },
+    {
+      "id": "window-2",
+      "name": "内容生产系统窗口",
+      "purpose": "内容创作、选题管理、素材整理",
+      "channel": "feishu",
+      "chatId": "待创建",
+      "accountId": "main",
+      "botId": "cli_a92b975b47781bca",
+      "status": "pending",
+      "createdAt": null,
+      "lastActive": null,
+      "memoryFile": "windows/window-2-content.md",
+      "currentTask": null,
+      "progress": null
+    },
+    {
+      "id": "window-3",
+      "name": "代运营系统窗口",
+      "purpose": "代运营工作、对标收集、爆款分析",
+      "channel": "feishu",
+      "chatId": "待创建",
+      "accountId": "main",
+      "botId": "cli_a92b975b47781bca",
+      "status": "pending",
+      "createdAt": null,
+      "lastActive": null,
+      "memoryFile": "windows/window-3-operation.md",
+      "currentTask": null,
+      "progress": null
+    },
+    {
+      "id": "window-4",
+      "name": "个人知识库梳理窗口",
+      "purpose": "笔记整理、知识管理、素材库填充",
+      "channel": "feishu",
+      "chatId": "待创建",
+      "accountId": "main",
+      "botId": "cli_a92b975b47781bca",
+      "status": "pending",
+      "createdAt": null,
+      "lastActive": null,
+      "memoryFile": "windows/window-4-knowledge.md",
+      "currentTask": null,
+      "progress": null
+    }
+  ]
+}

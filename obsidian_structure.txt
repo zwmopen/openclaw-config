@@ -1,0 +1,34 @@
+Obsidian仓库目录结构
+================================================================================
+
+根目录：D:\Program Files\Obsidian\zwm\.zwm
+
+子目录统计：
+--------------------------------------------------------------------------------
+个人知识库                                      7811 个md文件  D:\Program Files\Obsidian\zwm\.zwm\个人知识库
+ZWM 2.0 内容生产系统                             7487 个md文件  D:\Program Files\Obsidian\zwm\.zwm\ZWM 2.0 内容生产系统
+.obsidian                                  1229 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.obsidian
+OpenClaw配置                                  170 个md文件  D:\Program Files\Obsidian\zwm\.zwm\OpenClaw配置
+OpenClaw                                     69 个md文件  D:\Program Files\Obsidian\zwm\.zwm\OpenClaw
+03-代运营系统                                     36 个md文件  D:\Program Files\Obsidian\zwm\.zwm\03-代运营系统
+个人成长内容生产                                     30 个md文件  D:\Program Files\Obsidian\zwm\.zwm\个人成长内容生产
+个人成长                                         28 个md文件  D:\Program Files\Obsidian\zwm\.zwm\个人成长
+.trae                                        21 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.trae
+00待办事项                                       21 个md文件  D:\Program Files\Obsidian\zwm\.zwm\00待办事项
+概念                                           11 个md文件  D:\Program Files\Obsidian\zwm\.zwm\概念
+.stversions                                   5 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.stversions
+.trash                                        5 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.trash
+生财有术日报                                        4 个md文件  D:\Program Files\Obsidian\zwm\.zwm\生财有术日报
+方法论沉淀                                         2 个md文件  D:\Program Files\Obsidian\zwm\.zwm\方法论沉淀
+.qoder                                        1 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.qoder
+Excalidraw                                    1 个md文件  D:\Program Files\Obsidian\zwm\.zwm\Excalidraw
+教程分享                                          1 个md文件  D:\Program Files\Obsidian\zwm\.zwm\教程分享
+.claude                                       0 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.claude
+.git                                          0 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.git
+.infio_json_db                                0 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.infio_json_db
+.notecompanion                                0 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.notecompanion
+.smart-env                                    0 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.smart-env
+.stfolder                                     0 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.stfolder
+.stfolder.removed-20260303-130637             0 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.stfolder.removed-20260303-130637
+.zwm                                          0 个md文件  D:\Program Files\Obsidian\zwm\.zwm\.zwm
+--------------------------------------------------------------------------------

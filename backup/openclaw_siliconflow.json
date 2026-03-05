@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.2.21-2",
+    "lastTouchedAt": "2026-02-28T16:35:00.000Z"
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "siliconflow/deepseek-ai/DeepSeek-V3"
+      },
+      "workspace": "C:\\Users\\z\\.openclaw\\workspace",
+      "contextPruning": {
+        "mode": "cache-ttl",
+        "ttl": "1h"
+      },
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "heartbeat": {
+        "every": "30m"
+      }
+    }
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "accounts": {
+        "main": {
+          "appId": "cli_a92b975b47781bca",
+          "appSecret": "E6prhpRy7rsrVa7lMwpnHeNwbmsxkTCs",
+          "botName": "OpenClaw助手"
+        }
+      },
+      "dmPolicy": "open",
+      "appId": "cli_a92b975b47781bca",
+      "appSecret": "E6prhpRy7rsrVa7lMwpnHeNwbmsxkTCs"
+    }
+  },
+  "gateway": {
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": "71bd6f4031391006fb6b75ed1866fd11a4d9863cdd4592bb"
+    }
+  },
+  "models": {
+    "providers": {
+      "siliconflow": {
+        "api": "openai",
+        "baseUrl": "https://api.siliconflow.cn/v1",
+        "apiKey": "sk-hyaakxkupozeqeisekcvnvterzifvgcjconbghtmxgrjufke"
+      }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "feishu": {
+        "enabled": true
+      }
+    }
+  }
+}

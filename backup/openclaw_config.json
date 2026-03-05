@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.2.21-2",
+    "lastTouchedAt": "2026-02-27T09:38:00.000Z"
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "C:\\Users\\z\\.openclaw\\workspace",
+      "contextPruning": {
+        "mode": "cache-ttl",
+        "ttl": "1h"
+      },
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "heartbeat": {
+        "every": "30m"
+      }
+    }
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "gateway": {
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": "71bd6f4031391006fb6b75ed1866fd11a4d9863cdd4592bb"
+    }
+  },
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "dmPolicy": "open",
+      "accounts": {
+        "main": {
+          "appId": "cli_a92b975b47781bca",
+          "appSecret": "E6prhpRy7rsrVa7lMwpnHeNwbmsxkTCs",
+          "botName": "OpenClaw助手"
+        }
+      }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "feishu": {
+        "enabled": true
+      }
+    }
+  }
+}
