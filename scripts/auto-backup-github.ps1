@@ -9,6 +9,18 @@ param(
 $BaseDir = "D:\AI编程\openclaw"
 $LogFile = "D:\AI编程\openclaw\log\github-backup.log"
 
+# 敏感文件列表（绝对不提交）
+$SensitiveFiles = @(
+    "docs/API密钥汇总.json",
+    "docs/账号信息总览.md",
+    "安全配置/",
+    "scripts/github-upload.ps1",
+    "scripts/push-to-github.ps1",
+    "SECRETS.md",
+    "*.pem",
+    "*.key"
+)
+
 # 确保日志目录存在
 $logDir = Split-Path $LogFile -Parent
 if (-not (Test-Path $logDir)) {
@@ -28,6 +40,25 @@ function Write-Log {
 # 切换到工作目录
 Set-Location $BaseDir
 
+# 检查敏感文件是否存在
+$sensitiveFound = @()
+foreach ($file in $SensitiveFiles) {
+    if ($file.EndsWith("/")) {
+        $dir = $file.TrimEnd("/")
+        if (Test-Path $dir) {
+            $sensitiveFound += $file
+        }
+    } elseif (Test-Path $file) {
+        $sensitiveFound += $file
+    }
+}
+
+if ($sensitiveFound.Count -gt 0) {
+    Write-Log "⚠️ 警告：发现敏感文件，跳过备份"
+    Write-Log "敏感文件: $($sensitiveFound -join ', ')"
+    exit 1
+}
+
 # 检查是否有变更
 $status = git status --porcelain 2>$null
 if ($status.Count -eq 0 -and -not $Force) {
@@ -41,7 +72,7 @@ Write-Log "开始备份..."
 $commitDate = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 $commitMessage = "自动备份 - $commitDate"
 
-# 添加所有变更
+# 添加所有变更（.gitignore 会自动排除敏感文件）
 git add . 2>$null
 
 # 提交

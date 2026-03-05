@@ -1,31 +1,74 @@
-﻿# OpenClaw 工作目录
+# OpenClaw 工作目录 - Git忽略配置
+
+# ==================== 敏感配置（绝对不提交！）====================
+# 环境变量
+.env
+*.env
+
+# 密钥文件
+SECRETS.md
+API密钥*.json
+账号信息*.md
+
+# 安全配置目录
+安全配置/
+
+# SSH密钥
+keys/
+*.pem
+*.key
+
+# ==================== OpenClaw数据 ====================
 .openclaw/
 chromadb/
 chromadb-obsidian/
+
+# ==================== 临时文件 ====================
 temp/
 *.tmp
 *.temp
 *.log
 *.bak
+
+# ==================== 安装包 ====================
 *.exe
 *.msi
 *.zip
-*.pem
-*.key
-*.sqlite3
 
-# 敏感配置 - 绝对不要提交！
-docs/API密钥汇总.json
-docs/账号信息总览.md
-安全配置/
-SECRETS.md
-scripts/github-upload.ps1
-scripts/push-to-github.ps1
-
-# Node modules
+# ==================== Node.js ====================
 node_modules/
+package-lock.json
+yarn.lock
 
-# Python
+# ==================== Python ====================
 __pycache__/
 *.pyc
+*.pyo
 .venv/
+venv/
+env/
+
+# ==================== 数据库 ====================
+*.sqlite3
+*.db
+
+# ==================== 媒体文件 ====================
+MediaCrawler/
+media/
+*.mp4
+*.mp3
+*.wav
+
+# ==================== 系统文件 ====================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==================== 编辑器 ====================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==================== 重复目录 ====================
+重复/
