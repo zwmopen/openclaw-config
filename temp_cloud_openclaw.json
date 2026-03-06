@@ -1,0 +1,154 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.2.26",
+    "lastTouchedAt": "2026-03-05T00:44:48.919Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-03-05T00:44:48.827Z",
+    "lastRunVersion": "2026.2.26",
+    "lastRunCommand": "doctor",
+    "lastRunMode": "local"
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "unicom": {
+        "baseUrl": "https://maas-api.ai-yuanjing.com/openapi/compatible-mode/v1",
+        "apiKey": "sk-33b2451706fb4098850b14a9dfbb5827",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "glm-5",
+            "name": "GLM-5",
+            "compat": {
+              "supportsStore": false
+            }
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "unicom/glm-5"
+      },
+      "workspace": "/root/.openclaw/workspace",
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    }
+  },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "appId": "cli_a9288d4a46b89bcb",
+      "appSecret": "FjNdst92ILtErJUZOfo5dekJQX2Es3c3",
+      "domain": "feishu",
+      "groupPolicy": "open",
+      "dmPolicy": "open",
+      "requireMention": false,
+      "allowFrom": [
+        "*"
+      ]
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "all",
+    "controlUi": {
+      "allowedOrigins": [
+        "http://111.231.58.240:18789"
+      ],
+      "allowInsecureAuth": false,
+      "dangerouslyDisableDeviceAuth": false
+    },
+    "auth": {
+      "mode": "token",
+      "token": "738212dc329fcc297c4fd031a255dd77d4d23913faf94e6e"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    }
+  },
+  "skills": {
+    "install": {
+      "nodeManager": "npm"
+    }
+  },
+  "plugins": {
+    "entries": {
+      "feishu": {
+        "enabled": true
+      },
+      "qqbot": {
+        "enabled": true
+      },
+      "ddingtalk": {
+        "enabled": true
+      },
+      "wecom": {
+        "enabled": true
+      },
+      "adp-openclaw": {
+        "enabled": true
+      }
+    },
+    "installs": {
+      "qqbot": {
+        "source": "npm",
+        "spec": "@sliverp/qqbot@latest",
+        "installPath": "/root/.openclaw/extensions/qqbot",
+        "version": "1.5.0",
+        "resolvedName": "@sliverp/qqbot",
+        "resolvedVersion": "1.5.0",
+        "resolvedSpec": "@sliverp/qqbot@1.5.0"
+      },
+      "ddingtalk": {
+        "source": "npm",
+        "spec": "@largezhou/ddingtalk",
+        "installPath": "/root/.openclaw/extensions/ddingtalk",
+        "version": "1.3.2",
+        "resolvedName": "@largezhou/ddingtalk",
+        "resolvedVersion": "1.3.2",
+        "resolvedSpec": "@largezhou/ddingtalk@1.3.2"
+      },
+      "wecom": {
+        "source": "npm",
+        "spec": "@mocrane/wecom",
+        "installPath": "/root/.openclaw/extensions/wecom",
+        "version": "2026.2.27",
+        "resolvedName": "@mocrane/wecom",
+        "resolvedVersion": "2026.2.27",
+        "resolvedSpec": "@mocrane/wecom@2026.2.27"
+      },
+      "adp-openclaw": {
+        "source": "npm",
+        "spec": "adp-openclaw",
+        "installPath": "/root/.openclaw/extensions/adp-openclaw",
+        "version": "0.0.25",
+        "resolvedName": "adp-openclaw",
+        "resolvedVersion": "0.0.25",
+        "resolvedSpec": "adp-openclaw@0.0.25"
+      }
+    }
+  }
+}

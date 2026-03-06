@@ -1,53 +1,33 @@
 @echo off
 chcp 65001 >nul 2>&1
-title Restart OpenClaw Gateway
-
-echo ========================================
-echo   Restart OpenClaw Gateway
-echo ========================================
-echo.
 
 REM 切换到工作目录
 cd /d "%~dp0"
 
-echo [1/3] Stopping existing Gateway...
-for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":18789" ^| findstr "LISTENING"') do (
-    echo     Killing process %%a...
+REM 停止现有 Gateway
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":18789" ^| findstr "LISTENING" 2^>nul') do (
     taskkill /F /PID %%a >nul 2>&1
 )
-timeout /t 2 /nobreak >nul
 
-echo [2/3] Starting new Gateway...
-echo.
+REM 等待进程完全退出
+timeout /t 2 /nobreak >nul
 
 REM 设置环境变量
 set "OPENCLAW_STATE_DIR=%~dp0.openclaw"
 set "OPENCLAW_CONFIG_PATH=%~dp0.openclaw\openclaw.json"
 
-REM 启动网关（后台运行）
-start "" /min "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node.exe" "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node_modules\openclaw\openclaw.mjs" gateway
+REM 后台启动（不创建窗口）
+start /b "" "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node.exe" "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node_modules\openclaw\openclaw.mjs" gateway >nul 2>&1
 
-echo [3/3] Verifying...
+REM 等待启动
 timeout /t 3 /nobreak >nul
 
+REM 检查是否成功
 netstat -ano | findstr ":18789" | findstr "LISTENING" >nul
 if %errorlevel% equ 0 (
-    echo.
-    echo ========================================
-    echo   Success! Gateway is running.
-    echo ========================================
-    echo.
-    echo   Gateway: ws://127.0.0.1:18789
-    echo.
+    echo Gateway restarted successfully on port 18789
 ) else (
-    echo.
-    echo ========================================
-    echo   Failed to start Gateway.
-    echo ========================================
-    echo.
-    echo   Check logs in: %~dp0.openclaw\logs\
-    echo.
+    echo Failed to restart Gateway
 )
 
-echo Press any key to exit...
-pause >nul
+exit /b 0

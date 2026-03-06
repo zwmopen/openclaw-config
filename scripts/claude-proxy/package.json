@@ -1,0 +1,14 @@
+{
+  "name": "claude-proxy",
+  "version": "1.0.0",
+  "description": "Claude Code代理服务器，转换Anthropic格式到OpenAI格式",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "install-service": "node install-service.js",
+    "uninstall-service": "node uninstall-service.js"
+  },
+  "keywords": ["claude", "proxy", "api"],
+  "author": "AI明",
+  "license": "MIT"
+}
