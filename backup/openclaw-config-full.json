@@ -59,6 +59,17 @@
             "maxTokens": 4096,
             "cost": { "input": 0, "output": 0 },
             "compat": { "supportsDeveloperRole": false }
+          },
+          {
+            "id": "cogview-3",
+            "name": "CogView-3 (智谱图像生成)",
+            "reasoning": false,
+            "input": ["text"],
+            "output": ["image"],
+            "contextWindow": 1024,
+            "maxTokens": 1024,
+            "cost": { "input": 0, "output": 0 },
+            "compat": { "supportsDeveloperRole": false, "supportsImageGeneration": true }
           }
         ]
       }
