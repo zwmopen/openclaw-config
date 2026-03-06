@@ -226,7 +226,11 @@
 - 进入：`Claude模式`、`和Claude对话`、`帮我给Claude说xxx`、`给Claude说xxx`
 - 退出：`退出Claude模式`、`不和Claude说了`、`和你说`、`切换回来`、`正常模式`
 **机制**：AI明变成中转站，把用户的话转发给Claude，除非用户说退出。
-**状态**：⚠️ 网关未配置，需要配置Claude API Key才能调用
+**技术实现**：
+- CC Switch是本地代理工具，让Claude Code使用联通元景API
+- CC Switch配置：`activeProfile: unicom-new`，监听端口15721
+- 需要先启动CC Switch，再启动Claude Code
+**状态**：⚠️ 需要直接启动Claude Code进程（OpenClaw的sessions_spawn无法使用CC Switch配置）
 **技能文件**：`OpenClaw/技能-Claude对话模式.md`
 **改进**：以后用户说触发词，直接切换到Claude对话模式，无需每次说明。
 
