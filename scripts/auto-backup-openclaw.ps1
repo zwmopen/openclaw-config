@@ -1,4 +1,4 @@
-# OpenClaw Auto Backup Script
+﻿# OpenClaw Auto Backup Script
 # Auto push to GitHub at 00:00 every day
 # Created: 2026-03-06
 
@@ -11,7 +11,7 @@ function Write-Log {
     Write-Output "[$timestamp] $Message"
 }
 
-$repoPath = "D:\AI编程\openclaw"
+$repoPath = "D:\openclaw"
 
 Write-Log "=========================================="
 Write-Log "OpenClaw Auto Backup Start"
@@ -54,3 +54,4 @@ catch {
     Write-Log "=========================================="
     exit 1
 }
+

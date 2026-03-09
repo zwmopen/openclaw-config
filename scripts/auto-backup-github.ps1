@@ -1,4 +1,4 @@
-# OpenClaw 自动备份到 GitHub
+﻿# OpenClaw 自动备份到 GitHub
 # 每天自动提交并推送到 GitHub
 
 param(
@@ -7,7 +7,7 @@ param(
 )
 
 $BaseDir = "D:\AI编程\openclaw"
-$LogFile = "D:\AI编程\openclaw\log\github-backup.log"
+$LogFile = "D:\AI编程\openclaw\logs\github-backup.log"
 
 # 敏感文件列表（绝对不提交）
 $SensitiveFiles = @(
@@ -97,3 +97,10 @@ $commitCount = (git rev-list --count main 2>$null)
 Write-Log "📊 仓库统计: $fileCount 个文件, $commitCount 次提交"
 
 Write-Log "备份完成"
+
+# 发送通知到飞书
+$NotificationScript = "D:\AI编程\openclaw\scripts\Send-Notification.ps1"
+if (Test-Path $NotificationScript) {
+    & $NotificationScript -Title "✅ 备份完成" -Message "OpenClaw 工作目录已自动备份到 GitHub" -Status "success"
+}
+

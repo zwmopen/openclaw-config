@@ -1,4 +1,4 @@
-# OpenClaw 自动更新检查脚本
+﻿# OpenClaw 自动更新检查脚本
 # 每天检查一次是否有新版本，有则自动更新
 
 param(
@@ -11,7 +11,7 @@ $ErrorActionPreference = "SilentlyContinue"
 function Write-Log {
     param($Message, $Level = "INFO")
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    $logFile = "D:\AI编程\openclaw\logs\update.log"
+    $logFile = "D:\openclaw\logs\update.log"
     $logDir = Split-Path $logFile -Parent
     if (-not (Test-Path $logDir)) {
         New-Item -ItemType Directory -Path $logDir -Force | Out-Null
@@ -99,7 +99,7 @@ if ($currentVersion -ne "unknown" -and $latestVersion) {
 }
 
 # 记录检查时间
-$updateCheckFile = "D:\AI编程\openclaw\.openclaw\update-check.json"
+$updateCheckFile = "D:\openclaw\.openclaw\update-check.json"
 $checkData = @{
     lastCheck = (Get-Date -Format "yyyy-MM-ddTHH:mm:ss")
     currentVersion = $currentVersion
@@ -107,3 +107,4 @@ $checkData = @{
     needsUpdate = ($currentVersion -ne $latestVersion)
 }
 $checkData | ConvertTo-Json | Out-File $updateCheckFile -Encoding utf8
+

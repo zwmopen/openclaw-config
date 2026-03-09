@@ -1,8 +1,8 @@
-# 笔记梳理脚本
+﻿# 笔记梳理脚本
 # 扫描未梳理的笔记并创建梳理版本
 
 $vaultPath = "D:\Program Files\Obsidian\zwm\zwm"
-$progressFile = "D:\AI编程\openclaw\scripts\organize-progress.json"
+$progressFile = "D:\openclaw\scripts\organize-progress.json"
 $skipDirs = @(".obsidian", ".trae", ".git", ".qoder", "node_modules")
 $skipFiles = @("AGENTS.md", "SOUL.md", "USER.md", "IDENTITY.md", "TOOLS.md", "HEARTBEAT.md", "BOOTSTRAP.md", "MEMORY.md", "KNOWLEDGE.md")
 
@@ -35,3 +35,4 @@ Write-Host "发现 $($allFiles.Count) 条未梳理笔记"
 Write-Host "开始梳理..."
 
 $progress | ConvertTo-Json | Out-File $progressFile
+

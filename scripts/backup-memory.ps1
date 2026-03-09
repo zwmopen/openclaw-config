@@ -9,7 +9,7 @@ $TempDir = "$env:TEMP\ocbackup_$Date"
 if (Test-Path $TempDir) { Remove-Item $TempDir -Recurse -Force }
 New-Item -ItemType Directory -Path $TempDir -Force | Out-Null
 
-$OpenClawDir = "D:\AI编程\openclaw"
+$OpenClawDir = "D:\openclaw"
 $mdFiles = [System.IO.Directory]::GetFiles($OpenClawDir, "*.md")
 
 Write-Host "Found $($mdFiles.Count) files"
@@ -40,3 +40,4 @@ Write-Host "Backup complete: $BackupFile" -ForegroundColor Green
 Write-Host "Size: $([math]::Round($FileSize, 2)) KB ($fileCount files)"
 
 Remove-Item $TempDir -Recurse -Force -ErrorAction SilentlyContinue
+

@@ -1,4 +1,4 @@
-# 每日任务提醒脚本
+﻿# 每日任务提醒脚本
 # 通过飞书发送任务提醒
 
 param(
@@ -43,7 +43,7 @@ if ($Test) {
 }
 
 # 记录日志
-$logFile = "D:\AI编程\openclaw\logs\reminder.log"
+$logFile = "D:\openclaw\logs\reminder.log"
 $logDir = Split-Path $logFile -Parent
 if (-not (Test-Path $logDir)) {
     New-Item -ItemType Directory -Path $logDir -Force | Out-Null
@@ -84,3 +84,4 @@ try {
     Add-Content -Path $logFile -Value "[$timestamp] 发送失败: $_"
     Write-Host "❌ 发送失败: $_"
 }
+

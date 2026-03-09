@@ -1,4 +1,4 @@
-# 特定时间提醒脚本
+﻿# 特定时间提醒脚本
 # 在指定时间发送飞书消息提醒
 
 param(
@@ -8,7 +8,7 @@ param(
 $ErrorActionPreference = "SilentlyContinue"
 
 # 记录日志
-$logFile = "D:\AI编程\openclaw\logs\reminder.log"
+$logFile = "D:\openclaw\logs\reminder.log"
 $logDir = Split-Path $logFile -Parent
 if (-not (Test-Path $logDir)) {
     New-Item -ItemType Directory -Path $logDir -Force | Out-Null
@@ -48,3 +48,4 @@ try {
     Add-Content -Path $logFile -Value "[$timestamp] 发送失败: $_"
     Write-Host "❌ 发送失败: $_"
 }
+

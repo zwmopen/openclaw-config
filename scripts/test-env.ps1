@@ -1,8 +1,8 @@
-$env:NODE_PATH = "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node_modules"
-$env:OPENCLAW_STATE_DIR = "D:\AI编程\openclaw\.openclaw"
-$env:OPENCLAW_CONFIG_PATH = "D:\AI编程\openclaw\.openclaw\openclaw.json"
+﻿$env:NODE_PATH = "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node_modules"
+$env:OPENCLAW_STATE_DIR = "D:\openclaw\.openclaw"
+$env:OPENCLAW_CONFIG_PATH = "D:\openclaw\.openclaw\openclaw.json"
 
-Set-Location "D:\AI编程\openclaw"
+Set-Location "D:\openclaw"
 
 Write-Host "Testing environment variables..." -ForegroundColor Cyan
 Write-Host "OPENCLAW_STATE_DIR = $env:OPENCLAW_STATE_DIR" -ForegroundColor Yellow
@@ -18,3 +18,4 @@ console.log("=================================");
 '@
 
 $testCode | & "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node.exe" -
+

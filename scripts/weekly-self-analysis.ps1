@@ -1,4 +1,4 @@
-# 上帝视角自我迭代分析报告
+﻿# 上帝视角自我迭代分析报告
 # 每周周日21:00执行
 
 Write-Host "开始生成上帝视角自我迭代分析报告..." -ForegroundColor Green
@@ -90,7 +90,7 @@ $analysis | Out-File $reportPath -Encoding UTF8
 Write-Host "✅ 报告已保存: $reportPath" -ForegroundColor Green
 
 # 记录日志
-$logPath = "D:\AI编程\openclaw\logs\weekly-analysis.log"
+$logPath = "D:\openclaw\logs\weekly-analysis.log"
 $logDir = Split-Path $logPath -Parent
 if (-not (Test-Path $logDir)) {
     New-Item -ItemType Directory -Path $logDir -Force | Out-Null
@@ -100,3 +100,4 @@ $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 "$timestamp - 上帝视角自我迭代分析报告已生成" | Out-File $logPath -Append
 
 Write-Host "日志已记录: $logPath" -ForegroundColor Gray
+

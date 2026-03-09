@@ -1,11 +1,11 @@
-# OpenClaw 自动更新脚本
+﻿# OpenClaw 自动更新脚本
 # 每天晚上8点运行
 
 Write-Host "=== OpenClaw 自动更新检测 ===" -ForegroundColor Cyan
 Write-Host "时间: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -ForegroundColor Gray
 
 # 切换到 OpenClaw 目录
-Set-Location "D:\AI编程\openclaw"
+Set-Location "D:\openclaw"
 
 # 检查是否有更新
 Write-Host "`n检查更新..." -ForegroundColor Yellow
@@ -37,6 +37,7 @@ if ($gateway) {
 Write-Host "`n=== 更新检测完成 ===" -ForegroundColor Cyan
 
 # 记录日志
-$logPath = "D:\AI编程\openclaw\.openclaw\update-log.txt"
+$logPath = "D:\openclaw\.openclaw\update-log.txt"
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 "$timestamp - 更新检测完成" | Out-File -FilePath $logPath -Append
+

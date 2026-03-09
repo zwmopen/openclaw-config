@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     创建OpenClaw开机自动更新任务计划
 .DESCRIPTION
@@ -8,7 +8,7 @@
 #>
 
 $taskName = "OpenClaw-AutoUpdate"
-$scriptPath = "D:\AI编程\openclaw\update-openclaw.ps1"
+$scriptPath = "D:\openclaw\update-openclaw.ps1"
 
 $existingTask = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
 if ($existingTask) {
@@ -81,3 +81,4 @@ Write-Host "  查看任务: Get-ScheduledTask -TaskName '$taskName'"
 Write-Host "  手动运行: Start-ScheduledTask -TaskName '$taskName'"
 Write-Host "  删除任务: Unregister-ScheduledTask -TaskName '$taskName'"
 Write-Host "  强制更新: .\update-openclaw.ps1 -Force"
+

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     OpenClaw启动/停止开关脚本
 .DESCRIPTION
@@ -15,8 +15,8 @@ param(
     [string]$Action
 )
 
-$lockFile = "D:\AI编程\openclaw\.openclaw-running"
-$logFile = "D:\AI编程\openclaw\openclaw-switch.log"
+$lockFile = "D:\openclaw\.openclaw-running"
+$logFile = "D:\openclaw\openclaw-switch.log"
 
 function Write-Log {
     param([string]$message)
@@ -41,7 +41,7 @@ function Start-OpenClaw {
     }
     
     Start-Process -FilePath "powershell.exe" `
-                  -ArgumentList "-NoExit", "-Command", "cd 'D:\AI编程\openclaw'; .\openclaw.bat gateway" `
+                  -ArgumentList "-NoExit", "-Command", "cd 'D:\openclaw'; .\openclaw.bat gateway" `
                   -WindowStyle Normal
     
     "running" | Out-File -FilePath $lockFile
@@ -93,3 +93,4 @@ switch ($Action) {
     "status"  { Get-Status }
     "restart" { Stop-OpenClaw; Start-Sleep -Seconds 2; Start-OpenClaw }
 }
+

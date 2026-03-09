@@ -1,21 +1,41 @@
-# Set brightness to 0 at midnight
-Add-Type -TypeDefinition @"
-using System;
-using System.Runtime.InteropServices;
+# 设置屏幕亮度到0%
+# 用于晚上00:00自动调节亮度
 
-public class Brightness {
-    [DllImport("user32.dll")]
-    public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-    
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetForegroundWindow();
-    
-    public static void SetBrightness(int level) {
-        IntPtr hWnd = GetForegroundWindow();
-        SendMessage(hWnd, 0x0112, (IntPtr)0xF170, (IntPtr)level);
-    }
+$brightness = 0
+$timeout = 30000  # 30秒超时
+$LogFile = "D:\AI编程\openclaw\logs\brightness.log"
+
+# 确保日志目录存在
+$logDir = Split-Path $LogFile -Parent
+if (-not (Test-Path $logDir)) {
+    New-Item -ItemType Directory -Path $logDir -Force | Out-Null
 }
-"@
 
-[Brightness]::SetBrightness(0)
-Write-Host "Brightness set to 0 at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+function Write-Log {
+    param($Message)
+    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $logEntry = "[$timestamp] $Message"
+    Add-Content -Path $LogFile -Value $logEntry
+    Write-Output $logEntry
+}
+
+try {
+    # 获取显示器实例
+    $monitor = Get-CimInstance -Namespace root/wmi -ClassName WmiMonitorBrightnessMethods -ErrorAction Stop
+    
+    if ($monitor) {
+        # 设置亮度
+        Invoke-CimMethod -InputObject $monitor -MethodName WmiSetBrightness -Arguments @{Brightness = $brightness; Timeout = $timeout}
+        Write-Log "✅ 亮度已设置为 $brightness%"
+        
+        # 发送通知到飞书
+        $NotificationScript = "D:\AI编程\openclaw\scripts\Send-Notification.ps1"
+        if (Test-Path $NotificationScript) {
+            & $NotificationScript -Title "✅ 亮度已调整" -Message "屏幕亮度已自动调节到 0%（夜间模式）" -Status "success"
+        }
+    } else {
+        Write-Log "⚠️ 未找到显示器实例"
+    }
+} catch {
+    Write-Log "❌ 设置亮度失败: $_"
+}

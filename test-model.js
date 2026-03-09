@@ -1,13 +1,13 @@
 const https = require('https');
 
-const baseUrl = 'https://maas-api.ai-yuanjing.com';
-const apiKey = 'sk-33b2451706fb4098850b14a9dfbb5827';
+const baseUrl = 'https://dashscope.aliyuncs.com';
+const apiKey = 'sk-30c2f54620b2492993ca838323748d71';
 
-// 测试联通元景GLM-5模型
+// 测试阿里云百炼通义千问模型
 function testModel() {
     return new Promise((resolve, reject) => {
         const data = JSON.stringify({
-            model: 'glm-5',
+            model: 'qwen-plus',
             messages: [
                 { role: 'user', content: '你好，请简单回复' }
             ],
@@ -15,9 +15,9 @@ function testModel() {
         });
 
         const options = {
-            hostname: 'maas-api.ai-yuanjing.com',
+            hostname: 'dashscope.aliyuncs.com',
             port: 443,
-            path: '/openapi/compatible-mode/v1/chat/completions',
+            path: '/compatible-mode/v1/chat/completions',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -26,10 +26,13 @@ function testModel() {
             }
         };
 
-        console.log('=== 联通元景GLM-5模型测试 ===\n');
+        console.log('=== 阿里云百炼通义千问模型测试 ===\n');
         console.log('请求URL:', `https://${options.hostname}${options.path}`);
-        console.log('请求模型: glm-5');
+        console.log('请求模型: qwen-plus');
         console.log('');
+        console.log('API Key:', apiKey);
+        console.log('');
+
 
         const startTime = Date.now();
 

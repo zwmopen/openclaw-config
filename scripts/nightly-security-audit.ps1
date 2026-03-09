@@ -1,9 +1,9 @@
-# OpenClaw Nightly Security Audit Script v2.7 (Windows)
+﻿# OpenClaw Nightly Security Audit Script v2.7 (Windows)
 # Run daily at 03:00
 # Output: Feishu message + local report
 
 param(
-    [string]$OutputPath = "D:\AI编程\openclaw\logs\security-reports"
+    [string]$OutputPath = "D:\openclaw\logs\security-reports"
 )
 
 $ErrorActionPreference = "Continue"
@@ -31,7 +31,7 @@ $results = @()
 
 # 1. OpenClaw Config Audit
 function Test-OpenClawConfig {
-    $configPath = "D:\AI编程\openclaw\.openclaw\openclaw.json"
+    $configPath = "D:\openclaw\.openclaw\openclaw.json"
     $configPathAlt = "C:\Users\z\.openclaw\openclaw.json"
     if (Test-Path $configPath) {
         $configPath = $configPath
@@ -48,7 +48,7 @@ function Test-OpenClawConfig {
             return "WARNING: Config file permissions too wide"
         }
         # Check hash
-        $baselinePath = "D:\AI编程\openclaw\.openclaw\.config-baseline.sha256"
+        $baselinePath = "D:\openclaw\.openclaw\.config-baseline.sha256"
         if (Test-Path $baselinePath) {
             $currentHash = (Get-FileHash $configPath -Algorithm SHA256).Hash.ToLower()
             $baselineContent = Get-Content $baselinePath
@@ -78,7 +78,7 @@ function Test-NetworkSecurity {
 function Test-DirectoryChanges {
     $changes = @()
     $paths = @(
-        "D:\AI编程\openclaw\.openclaw",
+        "D:\openclaw\.openclaw",
         "C:\Users\z\.ssh"
     )
     foreach ($path in $paths) {
@@ -121,7 +121,7 @@ function Test-DiskUsage {
 # 6. Credential Leak Scan
 function Test-CredentialLeak {
     $leaked = @()
-    $memoryPath = "D:\AI编程\openclaw\.openclaw\workspace\memory"
+    $memoryPath = "D:\openclaw\.openclaw\workspace\memory"
     if (Test-Path $memoryPath) {
         $files = Get-ChildItem $memoryPath -Filter "*.md" -Recurse
         foreach ($file in $files) {
@@ -153,3 +153,4 @@ $fullReport | Out-File $reportFile -Encoding UTF8
 
 # Output to console
 Write-Output $fullReport
+

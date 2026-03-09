@@ -1,4 +1,4 @@
-# OpenClaw 云服务器部署脚本
+﻿# OpenClaw 云服务器部署脚本
 # 部署到联通云服务器 116.176.77.165
 
 param(
@@ -47,7 +47,7 @@ ssh "$User@$ServerIP" @"
 
 # 上传配置文件
 Write-Host "`n[5/5] 上传配置文件..." -ForegroundColor Yellow
-scp "D:\AI编程\openclaw\.openclaw\openclaw.json" "$User@$ServerIP:/root/.openclaw/openclaw.json"
+scp "D:\openclaw\.openclaw\openclaw.json" "$User@$ServerIP:/root/.openclaw/openclaw.json"
 
 Write-Host "`n========================================" -ForegroundColor Green
 Write-Host "  部署完成！" -ForegroundColor Green
@@ -59,3 +59,4 @@ Write-Host "  密码: $Password" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  启动命令: ssh $User@$ServerIP 'openclaw gateway'" -ForegroundColor Yellow
 Write-Host ""
+

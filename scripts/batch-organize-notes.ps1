@@ -1,9 +1,9 @@
-# 批量笔记梳理脚本
+﻿# 批量笔记梳理脚本
 # 频率控制：每分钟最多6次（安全范围，RPM=10限制）
 
 $notesRoot = "D:\Program Files\Obsidian\zwm\.zwm\个人知识库\印象笔记"
 $progressFile = "D:\Program Files\Obsidian\zwm\.zwm\OpenClaw\梳理进度.md"
-$logFile = "D:\AI编程\openclaw\logs\note-organize.log"
+$logFile = "D:\openclaw\logs\note-organize.log"
 
 # 创建日志目录
 $logDir = Split-Path $logFile -Parent
@@ -94,7 +94,7 @@ while ($true) {
     }
     
     # 创建待处理标记
-    $queueFile = "D:\AI编程\openclaw\logs\pending_notes.txt"
+    $queueFile = "D:\openclaw\logs\pending_notes.txt"
     Add-Content -Path $queueFile -Value $note.FullName
     
     # 频率控制：每处理6个文件等待10秒
@@ -127,3 +127,4 @@ $totalTime = $endTime - $startTime
 Write-Log "=== 批量梳理完成 ==="
 Write-Log "总处理: $totalProcessed 个文件"
 Write-Log "总时间: $($totalTime.TotalHours.ToString('F1')) 小时"
+
