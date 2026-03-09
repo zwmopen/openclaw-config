@@ -1,4 +1,4 @@
-﻿# Fix OpenClaw scheduled tasks - No more popup windows
+# Fix OpenClaw scheduled tasks - No more popup windows
 # Run as Administrator
 
 Write-Host ""
@@ -15,14 +15,14 @@ Write-Host "Done" -ForegroundColor Green
 Write-Host "Creating new tasks..." -ForegroundColor Yellow
 
 # Task 1: Morning brightness (7:00 AM)
-$action1 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument '-ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\openclaw\scripts\SetBrightness.ps1"'
+$action1 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument '-ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\AICode\openclaw\scripts\SetBrightness.ps1"'
 $trigger1 = New-ScheduledTaskTrigger -Daily -At 7:00
 $settings1 = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd -AllowStartIfOnBatteries
 Register-ScheduledTask -TaskName "OpenClaw_MorningBrightness" -Action $action1 -Trigger $trigger1 -Settings $settings1 -RunLevel Highest -Force | Out-Null
 Write-Host "  [OK] OpenClaw_MorningBrightness" -ForegroundColor Green
 
 # Task 2: Gateway auto start (at logon)
-$action2 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument '-ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\openclaw\scripts\start-gateway-hidden.ps1"'
+$action2 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument '-ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\AICode\openclaw\scripts\start-gateway-hidden.ps1"'
 $trigger2 = New-ScheduledTaskTrigger -AtLogon
 $settings2 = New-ScheduledTaskSettingsSet -StartWhenAvailable -DontStopOnIdleEnd -AllowStartIfOnBatteries
 Register-ScheduledTask -TaskName "OpenClaw-Gateway-AutoStart" -Action $action2 -Trigger $trigger2 -Settings $settings2 -RunLevel Highest -Force | Out-Null
@@ -32,4 +32,5 @@ Write-Host ""
 Write-Host "=== Fix Complete! No more popup windows ===" -ForegroundColor Green
 Write-Host ""
 pause
+
 

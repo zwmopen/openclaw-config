@@ -55,7 +55,7 @@ function Write-Log {
     $LogMessage = "[$Timestamp] [$Level] $Message"
     
     # 写入日志文件
-    $LogFile = "D:\AI编程\openclaw\logs\notifications.log"
+    $LogFile = "D:\AICode\openclaw\logs\notifications.log"
     $LogMessage | Out-File -FilePath $LogFile -Append -Encoding UTF8
     
     # 输出到控制台

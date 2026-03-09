@@ -1,13 +1,13 @@
-﻿# OpenClaw Gateway Keep-Alive Script (Simplified)
+# OpenClaw Gateway Keep-Alive Script (Simplified)
 # Check gateway status every 5 minutes and restart if needed
 
 $gatewayUrl = "http://127.0.0.1:18789"
-$stateFile = "D:\openclaw\.openclaw\gateway-state.json"
-$logFile = "D:\openclaw\.openclaw\keepalive.log"
+$stateFile = "D:\AICode\openclaw\.openclaw\gateway-state.json"
+$logFile = "D:\AICode\openclaw\.openclaw\keepalive.log"
 $nodeExe = "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node.exe"
 $openclawMjs = "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node_modules\openclaw\openclaw.mjs"
-$stateDir = "D:\openclaw\.openclaw"
-$configPath = "D:\openclaw\.openclaw\openclaw.json"
+$stateDir = "D:\AICode\openclaw\.openclaw"
+$configPath = "D:\AICode\openclaw\.openclaw\openclaw.json"
 
 function Write-Log {
     param($message, $level = "INFO")
@@ -65,4 +65,5 @@ if (-not $currentStatus) {
 } else {
     Write-Log "Gateway online" "INFO"
 }
+
 

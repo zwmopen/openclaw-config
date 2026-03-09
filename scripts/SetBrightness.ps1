@@ -3,7 +3,7 @@
 
 $brightness = 50
 $timeout = 30000  # 30秒超时
-$LogFile = "D:\AI编程\openclaw\logs\brightness.log"
+$LogFile = "D:\AICode\openclaw\logs\brightness.log"
 
 # 确保日志目录存在
 $logDir = Split-Path $LogFile -Parent
@@ -29,7 +29,7 @@ try {
         Write-Log "✅ 亮度已设置为 $brightness%"
         
         # 发送通知到飞书
-        $NotificationScript = "D:\AI编程\openclaw\scripts\Send-Notification.ps1"
+        $NotificationScript = "D:\AICode\openclaw\scripts\Send-Notification.ps1"
         if (Test-Path $NotificationScript) {
             & $NotificationScript -Title "✅ 亮度已调整" -Message "屏幕亮度已自动调节到 50%" -Status "success"
         }

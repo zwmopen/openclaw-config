@@ -1,4 +1,4 @@
-ï»¿# åˆ›å»º OpenClaw æ¡Œé¢å¿«æ·æ–¹å¼
+# ´´½¨ OpenClaw ×ÀÃæ¿ì½İ·½Ê½
 
 $WshShell = New-Object -ComObject WScript.Shell
 $Desktop = [System.Environment]::GetFolderPath('Desktop')
@@ -6,22 +6,23 @@ $ShortcutPath = Join-Path $Desktop "OpenClaw.lnk"
 
 $Shortcut = $WshShell.CreateShortcut($ShortcutPath)
 $Shortcut.TargetPath = "powershell.exe"
-$Shortcut.Arguments = "-ExecutionPolicy Bypass -File `"D:\openclaw\start-all.ps1`""
+$Shortcut.Arguments = "-ExecutionPolicy Bypass -File `"D:\AICode\openclaw\start-all.ps1`""
 $Shortcut.WorkingDirectory = "D:\openclaw"
 $Shortcut.Description = "OpenClaw AI Assistant"
 $Shortcut.IconLocation = "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node_modules\openclaw\assets\icon.ico,0"
 $Shortcut.Save()
 
-Write-Host "æ¡Œé¢å¿«æ·æ–¹å¼å·²åˆ›å»º: $ShortcutPath" -ForegroundColor Green
+Write-Host "×ÀÃæ¿ì½İ·½Ê½ÒÑ´´½¨: $ShortcutPath" -ForegroundColor Green
 
-# åŒæ—¶åˆ›å»ºåœæ­¢è„šæœ¬å¿«æ·æ–¹å¼
-$StopShortcutPath = Join-Path $Desktop "OpenClawåœæ­¢.lnk"
+# Í¬Ê±´´½¨Í£Ö¹½Å±¾¿ì½İ·½Ê½
+$StopShortcutPath = Join-Path $Desktop "OpenClawÍ£Ö¹.lnk"
 $StopShortcut = $WshShell.CreateShortcut($StopShortcutPath)
 $StopShortcut.TargetPath = "powershell.exe"
-$StopShortcut.Arguments = "-Command `"Get-Process -Name node -ErrorAction SilentlyContinue | Where-Object { `$_.CommandLine -like '*openclaw*' } | Stop-Process -Force; Write-Host 'OpenClawå·²åœæ­¢' -ForegroundColor Green; Start-Sleep -Seconds 2`""
+$StopShortcut.Arguments = "-Command `"Get-Process -Name node -ErrorAction SilentlyContinue | Where-Object { `$_.CommandLine -like '*openclaw*' } | Stop-Process -Force; Write-Host 'OpenClawÒÑÍ£Ö¹' -ForegroundColor Green; Start-Sleep -Seconds 2`""
 $StopShortcut.WorkingDirectory = "D:\openclaw"
-$StopShortcut.Description = "åœæ­¢ OpenClaw"
+$StopShortcut.Description = "Í£Ö¹ OpenClaw"
 $StopShortcut.Save()
 
-Write-Host "åœæ­¢å¿«æ·æ–¹å¼å·²åˆ›å»º: $StopShortcutPath" -ForegroundColor Green
+Write-Host "Í£Ö¹¿ì½İ·½Ê½ÒÑ´´½¨: $StopShortcutPath" -ForegroundColor Green
+
 

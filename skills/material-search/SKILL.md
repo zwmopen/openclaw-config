@@ -26,9 +26,9 @@
 
 ## 素材库位置
 
-- 概念库：`D:\Program Files\Obsidian\zwm\.zwm\02-ZWM 2.0 内容生产系统\01-内容生产\03-内容素材库\概念库.md`
-- 金句库：`D:\Program Files\Obsidian\zwm\.zwm\02-ZWM 2.0 内容生产系统\01-内容生产\03-内容素材库\金句库.md`
-- 案例库：`D:\Program Files\Obsidian\zwm\.zwm\02-ZWM 2.0 内容生产系统\01-内容生产\03-内容素材库\案例库.md`
+- 概念库：`D:\Program Files\Obsidian\zwm\.zwm\02-ZWM 2.0 内容生产系统\01-内容生产\02-内容素材库\核心概念库\概念库.md`
+- 金句库：`D:\Program Files\Obsidian\zwm\.zwm\02-ZWM 2.0 内容生产系统\01-内容生产\02-内容素材库\金句库.md`
+- 案例库：`D:\Program Files\Obsidian\zwm\.zwm\02-ZWM 2.0 内容生产系统\01-内容生产\02-内容素材库\案例库.md`
 
 ---
 

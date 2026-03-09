@@ -1,6 +1,6 @@
-﻿$env:NODE_PATH = "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node_modules"
-$env:OPENCLAW_STATE_DIR = "D:\openclaw\.openclaw"
-$env:OPENCLAW_CONFIG_PATH = "D:\openclaw\.openclaw\openclaw.json"
+$env:NODE_PATH = "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node_modules"
+$env:OPENCLAW_STATE_DIR = "D:\AICode\openclaw\.openclaw"
+$env:OPENCLAW_CONFIG_PATH = "D:\AICode\openclaw\.openclaw\openclaw.json"
 
 Set-Location "D:\openclaw"
 
@@ -18,4 +18,5 @@ console.log("=================================");
 '@
 
 $testCode | & "C:\Users\z\.trae-cn\binaries\node\versions\22.18.0\node.exe" -
+
 
